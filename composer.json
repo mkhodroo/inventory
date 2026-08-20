@@ -1,0 +1,31 @@
+{
+    "name": "arghavan/inventory",
+    "description": "Inventory management package for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "StockFlow\\Inventory\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "StockFlow\\Inventory\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "StockFlow\\Inventory\\InventoryServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0",
+        "phpunit/phpunit": "^12.0"
+    }
+}
