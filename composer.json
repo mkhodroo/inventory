@@ -19,13 +19,5 @@
                 "StockFlow\\Inventory\\InventoryServiceProvider"
             ]
         }
-    },
-    "require": {
-        "php": "^8.2",
-        "illuminate/support": "^13.0"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^10.0",
-        "phpunit/phpunit": "^12.0"
     }
 }
