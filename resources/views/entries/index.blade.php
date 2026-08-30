@@ -28,7 +28,7 @@
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
                         <option value="{{ $loop->iteration }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }}
+                            {{ $product->name }} | {{ $product->main_code }}
                         </option>
                     @endforeach
                 </select>
@@ -54,6 +54,7 @@
                         <th>ردیف</th>
                         <th>انبار</th>
                         <th>محصول</th>
+                        <th>کد اصلی</th>
                         <th>تعداد</th>
                         <th>دلیل ورود</th>
                         <th>ثبت کننده</th>
@@ -67,6 +68,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $entry->warehouse->name }}</td>
                             <td>{{ $entry->product->name }}</td>
+                            <td>{{ $entry->product->main_code }}</td>
                             <td>{{ $entry->quantity }}</td>
                             <td>{{ $entry->entryReason->name }}</td>
                             <td>{{ $entry->creator->name }}</td>
