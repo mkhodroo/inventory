@@ -10,7 +10,7 @@
         <form method="GET" class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">فیلتر بر اساس انبار</label>
-                <select name="warehouse_id" class="form-select">
+                <select name="warehouse_id" class="form-select select2">
                     <option value="">همه انبارها</option>
                     @foreach($warehouses as $warehouse)
                         <option value="{{ $warehouse->id }}" {{ request('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label">فیلتر بر اساس محصول</label>
-                <select name="product_id" class="form-select">
+                <select name="product_id" class="form-select select2">
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
                         <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
@@ -32,7 +32,7 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">نوع عملیات</label>
-                <select name="type" class="form-select">
+                <select name="type" class="form-select select2">
                     <option value="">همه</option>
                     <option value="entry" {{ request('type') == 'entry' ? 'selected' : '' }}>ورود</option>
                     <option value="exit" {{ request('type') == 'exit' ? 'selected' : '' }}>خروج</option>
@@ -47,7 +47,7 @@
                     <i class="fa fa-funnel"></i> فیلتر
                 </button>
                 <a href="{{ route('inventory.movements.index') }}" class="btn btn-outline-secondary">
-                    <i class="fa fa-x-lg"></i>
+                    <i class="fa fa-reload"></i>
                 </a>
             </div>
         </form>
