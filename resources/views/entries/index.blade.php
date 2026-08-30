@@ -13,7 +13,7 @@
         <form method="GET" class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">فیلتر بر اساس انبار</label>
-                <select name="warehouse_id" class="form-select">
+                <select name="warehouse_id" class="form-select select2">
                     <option value="">همه انبارها</option>
                     @foreach($warehouses as $warehouse)
                         <option value="{{ $loop->iteration }}" {{ request('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
@@ -24,11 +24,11 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">فیلتر بر اساس محصول</label>
-                <select name="product_id" class="form-select">
+                <select name="product_id" class="form-select select2">
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
                         <option value="{{ $loop->iteration }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }}
+                            {{ $product->name }} | {{ $product->main_code }}
                         </option>
                     @endforeach
                 </select>
@@ -54,6 +54,7 @@
                         <th>ردیف</th>
                         <th>انبار</th>
                         <th>محصول</th>
+                        <th>کد اصلی</th>
                         <th>تعداد</th>
                         <th>دلیل ورود</th>
                         <th>ثبت کننده</th>
@@ -67,6 +68,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $entry->warehouse->name }}</td>
                             <td>{{ $entry->product->name }}</td>
+                            <td>{{ $entry->product->main_code }}</td>
                             <td>{{ $entry->quantity }}</td>
                             <td>{{ $entry->entryReason->name }}</td>
                             <td>{{ $entry->creator->name }}</td>
