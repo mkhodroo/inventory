@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
-            $table->string('main_code');
+            $table->string('main_code')->unique();
             $table->string('unit');
             $table->string('sku');
             $table->foreignId('creator_id')->constrained('users');

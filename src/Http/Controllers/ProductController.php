@@ -48,10 +48,19 @@ class ProductController extends Controller
 
         $category = Category::findOrFail($validated['category_id']);
 
+        $mainCode = Product::generateMainCode($category->main_code, $validated['code']);
+
+         $exists = Product::where('main_code', $mainCode)->exists();
+        if ($exists) {
+            return back()->withErrors([
+                'code' => 'این کد محصول قبلاً برای این دسته‌بندی ثبت شده است.'
+            ])->withInput();
+        }
+
         $product = Product::create([
             'name' => $validated['name'],
             'code' => $validated['code'],
-            'main_code' => Product::generateMainCode($category->main_code, $validated['code']),
+            'main_code' => $mainCode,
             'unit' => $validated['unit'],
             'sku' => $validated['sku'],
             'status' => $validated['status'],
@@ -88,10 +97,23 @@ class ProductController extends Controller
 
         $category = Category::findOrFail($validated['category_id']);
 
+        $newMainCode = Product::generateMainCode($category->main_code, $validated['code']);
+
+         $exists = Product::where('main_code', $newMainCode)
+            ->where('id', '!=', $product->id)
+            ->exists();
+            
+        if ($exists) {
+            return back()->withErrors([
+                'code' => 'این کد محصول قبلاً برای این دسته‌بندی ثبت شده است.'
+            ])->withInput();
+        }
+
+
         $product->update([
             'name' => $validated['name'],
             'code' => $validated['code'],
-            'main_code' => Product::generateMainCode($category->main_code, $validated['code']),
+            'main_code' =>  $newMainCode,
             'unit' => $validated['unit'],
             'sku' => $validated['sku'],
             'status' => $validated['status'],
