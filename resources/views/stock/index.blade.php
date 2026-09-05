@@ -10,7 +10,7 @@
         <form method="GET" class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">فیلتر بر اساس محصول</label>
-                <select name="product_id" class="form-select">
+                <select name="product_id" class="form-select select2">
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
                         <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>

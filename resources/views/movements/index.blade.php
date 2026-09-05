@@ -25,7 +25,7 @@
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
                         <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }}
+                            {{ $product->name }} | {{ $product->main_code }}
                         </option>
                     @endforeach
                 </select>
@@ -47,7 +47,7 @@
                     <i class="fa fa-funnel"></i> فیلتر
                 </button>
                 <a href="{{ route('inventory.movements.index') }}" class="btn btn-outline-secondary">
-                    <i class="fa fa-reload"></i>
+                    <i class="fa fa-refresh"></i>
                 </a>
             </div>
         </form>

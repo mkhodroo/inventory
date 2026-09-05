@@ -13,7 +13,7 @@
         <form method="GET" class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">فیلتر بر اساس انبار</label>
-                <select name="warehouse_id" class="form-select">
+                <select name="warehouse_id" class="form-select select2">
                     <option value="">همه انبارها</option>
                     @foreach($warehouses as $warehouse)
                         <option value="{{ $loop->iteration }}" {{ request('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
@@ -24,18 +24,18 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">فیلتر بر اساس محصول</label>
-                <select name="product_id" class="form-select">
+                <select name="product_id" class="form-select select2">
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
                         <option value="{{ $loop->iteration }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
-                            {{ $product->name }}
+                            {{ $product->name }} | {{ $product->main_code }}
                         </option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">فیلتر بر اساس تحویل گیرنده</label>
-                <select name="receiver_id" class="form-select">
+                <select name="receiver_id" class="form-select select2">
                     <option value="">همه تحویل گیرندگان</option>
                     @foreach($receivers as $receiver)
                         <option value="{{ $receiver->id }}" {{ request('receiver_id') == $receiver->id ? 'selected' : '' }}>
