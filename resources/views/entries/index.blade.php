@@ -16,7 +16,7 @@
                 <select name="warehouse_id" class="form-select select2">
                     <option value="">همه انبارها</option>
                     @foreach($warehouses as $warehouse)
-                        <option value="{{ $loop->iteration }}" {{ request('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
+                        <option value="{{ $warehouse->id }}" {{ request('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
                             {{ $warehouse->name }}
                         </option>
                     @endforeach
@@ -27,7 +27,7 @@
                 <select name="product_id" class="form-select select2">
                     <option value="">همه محصولات</option>
                     @foreach($products as $product)
-                        <option value="{{ $loop->iteration }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
+                        <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>
                             {{ $product->name }} | {{ $product->main_code }}
                         </option>
                     @endforeach

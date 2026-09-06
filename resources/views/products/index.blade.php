@@ -16,10 +16,9 @@
                     <tr>
                         <th>ردیف</th>
                         <th>نام محصول</th>
-                        <th>دسته‌بندی‌ها</th>
                         <th>کد اصلی</th>
                         <th>واحد</th>
-                        <th>SKU</th>
+                        <!-- <th>SKU</th> -->
                         <th>وضعیت</th>
                         <th>قیمت خرید</th>
                         <th>ثبت کننده</th>
@@ -30,15 +29,15 @@
                     @forelse($products as $product)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td>
+                            <td>{{ $product->name }}
+                                <br>
                                 @foreach($product->categories as $category)
                                     <span class="badge bg-info">{{ $category->name }}</span>
                                 @endforeach
                             </td>
                             <td>{{ $product->main_code }}</td>
                             <td>{{ $product->unit }}</td>
-                            <td>{{ $product->sku }}</td>
+                            <!-- <td>{{ $product->sku }}</td> -->
                             <td>
                                 @php
                                     $statusClasses = [
