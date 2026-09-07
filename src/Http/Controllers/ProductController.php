@@ -19,6 +19,23 @@ class ProductController extends Controller
         return view('inventory::products.index', compact('products'));
     }
 
+    public function filter(Request $request)
+    {
+        $query = Product::with(['creator', 'categories', 'editors']);
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%'.$request->search.'%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $products = $query->oldest()->get();
+
+        return view('inventory::products.index', compact('products'));
+    }
+
     public function create()
     {
         $categories = Category::with('parent')->get();

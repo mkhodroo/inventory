@@ -67,6 +67,7 @@ Route::prefix(config('inventory.route_prefix'))->name('inventory.')->middleware(
     // Product Routes
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/filter', [ProductController::class, 'filter'])->name('filter');
         Route::get('/create', [ProductController::class, 'create'])->name('create');
         Route::post('/', [ProductController::class, 'store'])->name('store');
         Route::get('/{product}', [ProductController::class, 'show'])->name('show');
