@@ -10,7 +10,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="{{ route('inventory.products.filter') }}" method="GET" class="row">
+        <form action="{{ route('inventory.products.filter') }}" method="GET" class="row g-3">
             <div class="col-sm-4">
                 <label for="">نام محصول</label>
                 <input type="text" name="search" value="{{ request('search') }}" class="form-control " placeholder="نام محصول...">
@@ -25,7 +25,7 @@
                     <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
                 </select>
             </div>
-            <div class="col-sm-auto align-items-end">
+            <div class="col-sm-auto d-flex align-items-end">
                 <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
             </div>
         </form>
