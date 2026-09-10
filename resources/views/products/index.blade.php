@@ -26,7 +26,7 @@
                 </select>
             </div>
             <div class="col-sm-auto d-flex align-items-end">
-                <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
+                <button type="submit" class="btn btn-outline-primary">جستجو</button>
             </div>
         </form>
     </div>
