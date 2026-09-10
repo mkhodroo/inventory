@@ -8,17 +8,38 @@
     </a>
 </div>
 
-<form action="{{ route('inventory.products.filter') }}" method="GET" class="d-flex gap-2 mb-3">
-    <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="نام محصول...">
-    <select name="status" class="form-select form-select-sm">
-        <option value="">همه وضعیت‌ها</option>
-        <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
-        <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
-        <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
-        <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
-    </select>
-    <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
-</form>
+<div class="card mb-4">
+    <div class="card-body">
+        <form action="{{ route('inventory.products.filter') }}" method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">فیلتر نام محصول</label>
+                <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="نام محصول...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">فیلتر کد اصلی</label>
+                <input type="text" name="main_code" value="{{ request('main_code') }}" class="form-control" placeholder="کد اصلی...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">فیلتر وضعیت</label>
+                <select name="status" class="form-select">
+                    <option value="">همه-status</option>
+                    <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
+                    <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
+                    <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
+                    <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-secondary me-2">
+                    <i class="fa fa-funnel"></i> فیلتر
+                </button>
+                <a href="{{ route('inventory.products.index') }}" class="btn btn-outline-secondary">
+                    <i class="fa fa-x-lg"></i> پاک کردن
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div class="card">
     <div class="card-body">
