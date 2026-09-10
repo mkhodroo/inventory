@@ -27,6 +27,10 @@ class ProductController extends Controller
             $query->where('name', 'like', '%'.$request->search.'%');
         }
 
+        if ($request->filled('main_code')) {
+            $query->where('main_code', 'like', '%'.$request->main_code.'%');
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
