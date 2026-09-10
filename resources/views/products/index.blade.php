@@ -8,17 +8,21 @@
     </a>
 </div>
 
-<form action="{{ route('inventory.products.filter') }}" method="GET" class="d-flex gap-2 mb-3">
-    <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="نام محصول...">
-    <select name="status" class="form-select form-select-sm">
-        <option value="">همه وضعیت‌ها</option>
-        <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
-        <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
-        <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
-        <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
-    </select>
-    <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
-</form>
+<div class="card">
+    <form action="{{ route('inventory.products.filter') }}" method="GET" class="d-flex gap-2 mb-3">
+        <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="نام محصول...">
+        <select name="status" class="form-select form-select-sm">
+            <option value="">همه وضعیت‌ها</option>
+            <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
+            <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
+            <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
+            <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
+        </select>
+        <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
+    </form>
+</div>
+
+
 
 <div class="card">
     <div class="card-body">
