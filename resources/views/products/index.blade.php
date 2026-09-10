@@ -9,16 +9,24 @@
 </div>
 
 <div class="card">
-    <form action="{{ route('inventory.products.filter') }}" method="GET" class="d-flex gap-2 mb-3">
-        <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="نام محصول...">
-        <select name="status" class="form-select form-select-sm">
-            <option value="">همه وضعیت‌ها</option>
-            <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
-            <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
-            <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
-            <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
-        </select>
-        <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
+    <form action="{{ route('inventory.products.filter') }}" method="GET" class="row">
+        <div class="col-sm-4">
+            <label for="">نام محصول</label>
+            <input type="text" name="search" value="{{ request('search') }}" class="form-control " placeholder="نام محصول...">
+        </div>
+        <div class="col-sm-4">
+            <label for="">وضعیت محصول</label>
+            <select name="status" class="form-select form-select-sm">
+                <option value="">همه وضعیت‌ها</option>
+                <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
+                <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
+                <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
+                <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
+            </select>
+        </div>
+        <div class="col-sm-auto">
+            <button type="submit" class="btn btn-sm btn-outline-primary">جستجو</button>
+        </div>
     </form>
 </div>
 
