@@ -29,14 +29,7 @@
                     <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>فروش رفته</option>
                 </select>
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-secondary me-2">
-                    <i class="fa fa-funnel"></i> فیلتر
-                </button>
-                <a href="{{ route('inventory.products.index') }}" class="btn btn-outline-secondary">
-                    <i class="fa fa-x-lg"></i> پاک کردن
-                </a>
-            </div>
+            
         </form>
     </div>
 </div>
