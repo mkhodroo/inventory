@@ -22,7 +22,7 @@
             <div class="col-md-4">
                 <label class="form-label">فیلتر وضعیت</label>
                 <select name="status" class="form-select select2">
-                    <option value="">همه-status</option>
+                    <option value="">همه </option>
                     <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>موجود</option>
                     <option value="consumed" {{ request('status') == 'consumed' ? 'selected' : '' }}>مصرف شده</option>
                     <option value="consignment" {{ request('status') == 'consignment' ? 'selected' : '' }}>امانی</option>
