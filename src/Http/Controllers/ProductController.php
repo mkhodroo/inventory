@@ -3,6 +3,7 @@
 namespace StockFlow\Inventory\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use StockFlow\Inventory\InventoryServiceProvider;
 use StockFlow\Inventory\Models\Category;
@@ -44,6 +45,56 @@ class ProductController extends Controller
         return view('inventory::products.create', compact('categories', 'statuses'));
     }
 
+    public function modalCreate(Request $request)
+    {
+        $categories = Category::with('parent')->orderBy('main_code')->get();
+        $statuses = Product::STATUSES;
+
+        return view('inventory::products.partials.modal-create', [
+            'categories' => $categories,
+            'statuses' => $statuses,
+            'prefilledCode' => $request->query('term'),
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $validated = $request->validate([
+            'term' => 'required|string|min:1|max:255',
+        ]);
+
+        $products = $this->searchProducts($validated['term']);
+
+        return response()->json([
+            'found' => $products->isNotEmpty(),
+            'products' => $products->map(fn (Product $product) => $this->productPayload($product))->values(),
+        ]);
+    }
+
+    public function lookup(Request $request)
+    {
+        $validated = $request->validate([
+            'term' => 'nullable|string|max:255',
+            'code' => 'nullable|string|max:255',
+        ]);
+
+        $term = trim((string) ($validated['term'] ?? $validated['code'] ?? ''));
+
+        if ($term === '') {
+            return response()->json([
+                'found' => false,
+                'products' => [],
+            ]);
+        }
+
+        $products = $this->searchProducts($term);
+
+        return response()->json([
+            'found' => $products->isNotEmpty(),
+            'products' => $products->map(fn (Product $product) => $this->productPayload($product))->values(),
+        ]);
+    }
+
     public function show(Product $product)
     {
         $product->load(['creator', 'categories', 'editors']);
@@ -67,10 +118,21 @@ class ProductController extends Controller
 
         $mainCode = Product::generateMainCode($category->main_code, $validated['code']);
 
-         $exists = Product::where('main_code', $mainCode)->exists();
+        $exists = Product::where('main_code', $mainCode)->exists();
         if ($exists) {
+            $message = 'این کد محصول قبلاً برای این دسته‌بندی ثبت شده است.';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => $message,
+                    'errors' => [
+                        'code' => [$message],
+                    ],
+                ], 422);
+            }
+
             return back()->withErrors([
-                'code' => 'این کد محصول قبلاً برای این دسته‌بندی ثبت شده است.'
+                'code' => $message,
             ])->withInput();
         }
 
@@ -86,6 +148,14 @@ class ProductController extends Controller
         ]);
 
         $product->categories()->sync([$validated['category_id']]);
+        $product->load('categories');
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'کالا با موفقیت تعریف و برای ثبت ورود انتخاب شد.',
+                'product' => $this->productPayload($product),
+            ], 201);
+        }
 
         return redirect()->route('inventory.products.index')
             ->with('success', 'محصول با موفقیت ایجاد شد.');
@@ -142,6 +212,40 @@ class ProductController extends Controller
 
         return redirect()->route('inventory.products.index')
             ->with('success', 'محصول با موفقیت ویرایش شد.');
+    }
+
+    private function searchProducts(string $term): Collection
+    {
+        return Product::with('categories')
+            ->where(function ($query) use ($term) {
+                $query->where('name', 'like', '%'.$term.'%')
+                    ->orWhere('code', 'like', '%'.$term.'%')
+                    ->orWhere('main_code', 'like', '%'.$term.'%')
+                    ->orWhere('sku', 'like', '%'.$term.'%');
+            })
+            ->oldest()
+            ->limit(5)
+            ->get();
+    }
+
+    private function productPayload(Product $product): array
+    {
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'code' => $product->code,
+            'main_code' => $product->main_code,
+            'unit' => $product->unit,
+            'sku' => $product->sku,
+            'status' => $product->status,
+            'status_label' => $product->status_label,
+            'price' => $product->price,
+            'categories' => $product->categories->map(fn (Category $category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'main_code' => $category->main_code,
+            ])->values(),
+        ];
     }
 
     public function destroy(Product $product)

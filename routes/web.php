@@ -57,6 +57,7 @@ Route::prefix(config('inventory.route_prefix'))->name('inventory.')->middleware(
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
         Route::get('/create', [CategoryController::class, 'create'])->name('create');
+        Route::get('/modal-create', [CategoryController::class, 'modalCreate'])->name('modal-create');
         Route::post('/', [CategoryController::class, 'store'])->name('store');
         Route::get('/{category}', [CategoryController::class, 'show'])->name('show');
         Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('edit');
@@ -69,6 +70,9 @@ Route::prefix(config('inventory.route_prefix'))->name('inventory.')->middleware(
         Route::get('/', [ProductController::class, 'index'])->name('index');
         Route::get('/filter', [ProductController::class, 'filter'])->name('filter');
         Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::get('/search', [ProductController::class, 'search'])->name('search');
+        Route::get('/modal-create', [ProductController::class, 'modalCreate'])->name('modal-create');
+        Route::get('/lookup', [ProductController::class, 'lookup'])->name('lookup');
         Route::post('/', [ProductController::class, 'store'])->name('store');
         Route::get('/{product}', [ProductController::class, 'show'])->name('show');
         Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
@@ -90,6 +94,7 @@ Route::prefix(config('inventory.route_prefix'))->name('inventory.')->middleware(
     // Entry Reasons Routes
     Route::prefix('entry-reasons')->name('entry-reasons.')->group(function () {
         Route::get('/', [EntryReasonController::class, 'index'])->name('index');
+        Route::get('/modal-create', [EntryReasonController::class, 'modalCreate'])->name('modal-create');
         Route::post('/', [EntryReasonController::class, 'store'])->name('store');
         Route::put('/{entryReason}', [EntryReasonController::class, 'update'])->name('update');
         Route::delete('/{entryReason}', [EntryReasonController::class, 'destroy'])->name('destroy');

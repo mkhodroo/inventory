@@ -15,6 +15,11 @@ class EntryReasonController extends Controller
         return view('inventory::entry-reasons.index', compact('entryReasons'));
     }
 
+    public function modalCreate()
+    {
+        return view('inventory::entry-reasons.partials.modal-create');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -23,7 +28,17 @@ class EntryReasonController extends Controller
 
         $validated['creator_id'] = $request->user()->id;
 
-        EntryReason::create($validated);
+        $entryReason = EntryReason::create($validated);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'دلیل ورود با موفقیت ایجاد شد.',
+                'entry_reason' => [
+                    'id' => $entryReason->id,
+                    'name' => $entryReason->name,
+                ],
+            ], 201);
+        }
 
         return redirect()->route('inventory.entry-reasons.index')
             ->with('success', 'دلیل ورود با موفقیت ایجاد شد.');

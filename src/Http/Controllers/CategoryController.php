@@ -26,6 +26,13 @@ class CategoryController extends Controller
         return view('inventory::categories.create', compact('parentCategories'));
     }
 
+    public function modalCreate()
+    {
+        $parentCategories = Category::with('parent')->oldest()->get();
+
+        return view('inventory::categories.partials.modal-create', compact('parentCategories'));
+    }
+
     public function show(Category $category)
     {
         $category->load(['creator', 'parent', 'editors', 'products']);
@@ -48,6 +55,21 @@ class CategoryController extends Controller
         $validated['creator_id'] = $request->user()->id;
 
         $category = Category::create($validated);
+        $category->load('parent');
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'دسته‌بندی با موفقیت ایجاد شد.',
+                'category' => [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'code' => $category->code,
+                    'main_code' => $category->main_code,
+                    'parent_id' => $category->parent_id,
+                    'parent_name' => $category->parent?->name,
+                ],
+            ], 201);
+        }
 
         return redirect()->route('inventory.categories.index')
             ->with('success', 'دسته‌بندی با موفقیت ایجاد شد.');

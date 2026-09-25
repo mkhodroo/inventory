@@ -36,10 +36,14 @@ class EntryController extends Controller
     public function create()
     {
         $warehouses = Warehouse::all();
-        $products = Product::all();
         $entryReasons = EntryReason::all();
+        $selectedProduct = old('product_id') ? Product::find(old('product_id')) : null;
 
-        return view('inventory::entries.create', compact('warehouses', 'products', 'entryReasons'));
+        return view('inventory::entries.create', compact(
+            'warehouses',
+            'entryReasons',
+            'selectedProduct'
+        ));
     }
 
     public function store(Request $request)
