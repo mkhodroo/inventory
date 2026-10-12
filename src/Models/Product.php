@@ -5,6 +5,7 @@ namespace StockFlow\Inventory\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use StockFlow\Inventory\InventoryServiceProvider;
 
 class Product extends Model
@@ -53,6 +54,11 @@ class Product extends Model
     public function editors(): BelongsToMany
     {
         return $this->belongsToMany(config('inventory.user_model', 'App\Models\User'), InventoryServiceProvider::getTableName('product_editors'));
+    }
+
+    public function specifications(): HasMany
+    {
+        return $this->hasMany(ProductSpecification::class, 'product_id');
     }
 
     public static function generateMainCode(string $categoryMainCode, string $code): string

@@ -86,6 +86,9 @@
                     @enderror
                 </div>
             </div>
+
+            @include('inventory::products.partials.specifications-fields')
+
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-check-lg"></i> ذخیره
             </button>

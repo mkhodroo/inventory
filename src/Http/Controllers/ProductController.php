@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['creator', 'categories', 'editors'])
+        $products = Product::with(['creator', 'categories', 'editors', 'specifications'])
             ->oldest()
             ->get();
 
@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
-        $query = Product::with(['creator', 'categories', 'editors']);
+        $query = Product::with(['creator', 'categories', 'editors', 'specifications']);
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%'.$request->search.'%');
@@ -36,9 +36,43 @@ class ProductController extends Controller
             $query->where('status', $request->status);
         }
 
+        $query = $this->applySpecificationFilters($query, $request);
+
         $products = $query->oldest()->get();
 
         return view('inventory::products.index', compact('products'));
+    }
+
+    private function applySpecificationFilters($query, Request $request)
+    {
+        $specifications = $request->input('specifications', []);
+
+        if (! is_array($specifications)) {
+            return $query;
+        }
+
+        foreach ($specifications as $specification) {
+            if (! is_array($specification)) {
+                continue;
+            }
+
+            $name = trim((string) ($specification['name'] ?? ''));
+            $value = trim((string) ($specification['value'] ?? ''));
+
+            if ($name === '') {
+                continue;
+            }
+
+            $query->whereHas('specifications', function ($specQuery) use ($name, $value) {
+                $specQuery->where('name', $name);
+
+                if ($value !== '') {
+                    $specQuery->where('value', 'like', '%'.$value.'%');
+                }
+            });
+        }
+
+        return $query;
     }
 
     public function create()
@@ -101,7 +135,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        $product->load(['creator', 'categories', 'editors']);
+        $product->load(['creator', 'categories', 'editors', 'specifications']);
 
         return view('inventory::products.show', compact('product'));
     }
@@ -116,6 +150,9 @@ class ProductController extends Controller
             'sku' => 'required|string|max:255',
             'status' => 'required|in:available,consumed,consignment,sold',
             'price' => 'required|numeric|min:0',
+            'specifications' => 'nullable|array',
+            'specifications.*.name' => 'nullable|string|max:255',
+            'specifications.*.value' => 'nullable|string|max:255',
         ]);
 
         $category = Category::findOrFail($validated['category_id']);
@@ -151,8 +188,11 @@ class ProductController extends Controller
             'creator_id' => $request->user()->id,
         ]);
 
+        $this->syncSpecifications($product, $request->input('specifications', []));
+
         $product->categories()->sync([$validated['category_id']]);
         $product->load('categories');
+        $product->load('specifications');
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -168,6 +208,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $product->load('categories');
+        $product->load('specifications');
         $categories = Category::with('parent')->get();
         $statuses = Product::STATUSES;
 
@@ -184,6 +225,9 @@ class ProductController extends Controller
             'sku' => 'required|string|max:255',
             'status' => 'required|in:available,consumed,consignment,sold',
             'price' => 'required|numeric|min:0',
+            'specifications' => 'nullable|array',
+            'specifications.*.name' => 'nullable|string|max:255',
+            'specifications.*.value' => 'nullable|string|max:255',
         ]);
 
         $category = Category::findOrFail($validated['category_id']);
@@ -211,11 +255,39 @@ class ProductController extends Controller
             'price' => $validated['price'],
         ]);
 
+        $this->syncSpecifications($product, $request->input('specifications', []));
+
         $product->categories()->sync([$validated['category_id']]);
         $product->editors()->syncWithoutDetaching([$request->user()->id]);
 
         return redirect()->route('inventory.products.index')
             ->with('success', 'محصول با موفقیت ویرایش شد.');
+    }
+
+    private function syncSpecifications(Product $product, array $specifications): void
+    {
+        $rows = [];
+
+        foreach ($specifications as $specification) {
+            if (! is_array($specification)) {
+                continue;
+            }
+
+            $name = trim((string) ($specification['name'] ?? ''));
+            $value = trim((string) ($specification['value'] ?? ''));
+
+            if ($name === '') {
+                continue;
+            }
+
+            $rows[] = [
+                'name' => $name,
+                'value' => $value === '' ? null : $value,
+            ];
+        }
+
+        $product->specifications()->delete();
+        $product->specifications()->createMany($rows);
     }
 
     private function searchProducts(string $term): Collection
@@ -248,6 +320,10 @@ class ProductController extends Controller
                 'id' => $category->id,
                 'name' => $category->name,
                 'main_code' => $category->main_code,
+            ])->values(),
+            'specifications' => $product->specifications->map(fn ($specification) => [
+                'name' => $specification->name,
+                'value' => $specification->value,
             ])->values(),
         ];
     }

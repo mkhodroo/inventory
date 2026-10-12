@@ -71,6 +71,8 @@
         </div>
     </div>
 
+    @include('inventory::products.partials.specifications-fields')
+
     <div class="text-left">
         <button type="submit" class="btn btn-primary">
             <i class="fa fa-check"></i> ذخیره کالا

@@ -37,6 +37,8 @@
                     <i class="fa fa-x-lg"></i> پاک کردن
                 </a>
             </div>
+
+            @include('inventory::products.partials.specifications-filter')
         </form>
     </div>
 </div>
@@ -54,6 +56,7 @@
                         <!-- <th>SKU</th> -->
                         <th>وضعیت</th>
                         <th>قیمت خرید</th>
+                        <th>مشخصات</th>
                         <th>ثبت کننده</th>
                         <th>عملیات</th>
                     </tr>
@@ -85,6 +88,15 @@
                                 </span>
                             </td>
                             <td>{{ number_format($product->price) }} ریال</td>
+                            <td>
+                                @forelse($product->specifications as $specification)
+                                    <span class="badge bg-light text-dark border d-block mb-1 text-start">
+                                        {{ $specification->name }}: {{ $specification->value ?? '—' }}
+                                    </span>
+                                @empty
+                                    <span class="text-muted">—</span>
+                                @endforelse
+                            </td>
                             <td>{{ $product->creator->name }}</td>
                             <td class="text-nowrap">
                                 <div class="d-flex gap-1">
@@ -107,7 +119,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center">هیچ محصولی یافت نشد.</td>
+                            <td colspan="11" class="text-center">هیچ محصولی یافت نشد.</td>
                         </tr>
                     @endforelse
                 </tbody>

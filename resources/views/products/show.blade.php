@@ -78,6 +78,31 @@
             </p>
         </div>
         <div class="mb-3">
+            <label class="form-label fw-bold">مشخصات کالا</label>
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>نام ویژگی</th>
+                            <th>مقدار</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($product->specifications as $specification)
+                            <tr>
+                                <td>{{ $specification->name }}</td>
+                                <td>{{ $specification->value ?? '—' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">مشخصاتی ثبت نشده است.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mb-3">
             <label class="form-label fw-bold">ویرایشگران</label>
             <p class="form-control-plaintext">
                 @forelse($product->editors as $editor)

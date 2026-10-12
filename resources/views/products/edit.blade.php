@@ -87,6 +87,9 @@
                     @enderror
                 </div>
             </div>
+
+            @include('inventory::products.partials.specifications-fields', ['specs' => old('specifications', $product->specifications)])
+
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-check-lg"></i> بروزرسانی
             </button>
